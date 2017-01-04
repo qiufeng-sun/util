@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<root>
+	<item id="1001" type="100"/>
+	<item id="1002" type="200"/>
+	<item id="1003" type="100"/>
+	<item id="1011" type="200" qlty="2"/>
+	<item id="1012" type="100" qlty="1"/>
+	<item id="1013" type="300" qlty="3"/>
+</root>

@@ -1,0 +1,14 @@
+.idea/
+*.iml
+*~
+*.swp
+*.log
+*.log.*
+*.test
+*.cpu
+*.mem
+*.block
+
+# vendor
+vendor/*
+!vendor/manifest
