@@ -14,18 +14,18 @@ type funcParse func(data []byte, v interface{}) error
 
 // 读取并解析文件数据
 func ParseFile(parse funcParse, fileName string, out interface{}) error {
-	logs.Debug("load file<%s>\n", fileName)
+	logs.Debug("load file<%s>", fileName)
 
 	// 打开并读取文件
 	data, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		logs.Error("file %v load failed! err=%v\n", fileName, err.Error())
+		logs.Error("file %v load failed! err=%v", fileName, err.Error())
 		return err
 	}
 
 	// 解析数据
 	if err = parse(data, out); err != nil {
-		logs.Error("file %v data parse failed! err=%v\n", fileName, err.Error())
+		logs.Error("file %v data parse failed! err=%v", fileName, err.Error())
 		return err
 	}
 
