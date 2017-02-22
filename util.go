@@ -3,9 +3,7 @@ package util
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"reflect"
-	"runtime"
 	"time"
 )
 
@@ -83,24 +81,6 @@ func ToObj(b []byte, dst interface{}) error {
 	}
 
 	return nil
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// 调用者
-func Caller(steps int) string {
-	if pc, _, line, ok := runtime.Caller(steps + 1); ok {
-		return fmt.Sprintf("[%s:%d]", runtime.FuncForPC(pc).Name(), line)
-	}
-
-	return "[?]"
-}
-
-func CallerFile(steps int) string {
-	if _, filename, line, ok := runtime.Caller(steps + 1); ok {
-		return fmt.Sprintf("[%s:%d]", filename, line)
-	}
-
-	return "[?]"
 }
 
 ////////////////////////////////////////////////////////////////////////////////

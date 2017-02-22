@@ -45,7 +45,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"strings"
-	"time"
 
 	ghLogs "github.com/astaxie/beego/logs"
 
@@ -135,11 +134,6 @@ func Debugln(v ...interface{}) {
 	g_log.Debug(strings.Repeat("%v ", len(v)), v...)
 }
 
-func DebugFunc() {
-	caller := util.Caller(1)
-	g_log.Debug(caller)
-}
-
 func Error(format string, v ...interface{}) {
 	g_log.Error(format, v...)
 }
@@ -171,21 +165,4 @@ func Critical(format string, v ...interface{}) {
 func Panicln(v ...interface{}) {
 	s := fmt.Sprintf(strings.Repeat("%v ", len(v)), v...)
 	panic(s)
-}
-
-// CheckTime: 记录进入和退出函数时间, 并根据条件输出.
-//   例:在需要统计的函数起始处调用defer CheckTime(200)()
-func CheckTime(outMilliSec int64, steps int, debug bool) func() {
-	start := time.Now()
-	return func() {
-		end := time.Now()
-		t := (int64)(end.Sub(start) / 1000000)
-		if debug || t > outMilliSec {
-			if steps < 0 {
-				steps = 0
-			}
-			caller := util.Caller(steps + 1)
-			Warn("caution%v: start:%v, end:%v, elapsed:%v", caller, start, end, t)
-		}
-	}
 }
