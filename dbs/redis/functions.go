@@ -2,43 +2,23 @@ package redis
 
 import (
 	"util/logs"
-
-	ghRedis "github.com/garyburd/redigo/redis"
 )
+
+//
+var g_val = 1
 
 // locker
 func Lock(key string, lockSec int, conn *RedisConn) bool {
-	logs.DebugFunc()
-
-	//
-	val := 1
-
-	reply, e := ghRedis.Int(conn.Do("SETNX", key, val))
-	if e != nil {
-		logs.Error("SETNX failed! error=%v\n", e)
+	// SET key value [EX seconds] [PX milliseconds] [NX|XX]
+	r, e := conn.Do("SET", key, g_val, "EX", lockSec, "NX")
+	if e != nil || nil == r {
+		logs.Info("SET NX expire failed! reply=%v, error=%v\n", r, e)
 		return false
 	}
 
-	// lock success
-	if 1 == reply {
-		conn.Do("EXPIRE", key, lockSec)
-		return true
-	}
-
-	// lock failed
-	reply, e = ghRedis.Int(conn.Do("TTL", key))
-	if e != nil {
-		logs.Error("TTL failed! error=%v\n", e)
-		return false
-	}
-
-	if -1 == reply {
-		conn.Do("EXPIRE", key, lockSec)
-	}
-
-	return false
+	return true
 }
 
-func UnLock(key string, conn *RedisConn) {
+func Unlock(key string, conn *RedisConn) {
 	conn.Do("DEL", key)
 }
