@@ -45,28 +45,29 @@ func CheckTime(outMilliSec int64, steps int, debug bool) func() {
 	}
 }
 
-// usage: 在goroutine开始时执行 defer PrintPanic()
-func PrintPanic(exit bool) {
+// usage: 在goroutine开始时执行 defer Recover()
+func Recover(exit bool) {
 	if r := recover(); r != nil {
 		logs.Critical("panic:%v", r)
 		logs.Critical("%s", debug.Stack())
 
 		if exit {
 			logs.Critical("exit now!")
+			logs.GetLogger().Flush()
 			os.Exit(1)
 		}
 	}
-	logs.GetLogger().Flush()
 }
 
 // usage: Exec(func, param1, param2, ...)
 func Exec(exit bool, f interface{}, params ...interface{}) {
+	defer Recover(exit)
+
 	vf := reflect.ValueOf(f)
 	vps := make([]reflect.Value, len(params))
 	for i := 0; i < len(params); i++ {
 		vps[i] = reflect.ValueOf(params[i])
 	}
 
-	defer PrintPanic(exit)
 	vf.Call(vps)
 }

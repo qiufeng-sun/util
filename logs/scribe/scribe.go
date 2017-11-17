@@ -7,8 +7,8 @@ import (
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"github.com/astaxie/beego/config"
 
-	"util"
 	"util/logs"
+	"util/run"
 	"util/thrift/scribe"
 )
 
@@ -62,14 +62,14 @@ func (this *ScribeClient) loop() {
 func (this *ScribeClient) connect() bool {
 	socket, err := thrift.NewTSocket(this.hostPort)
 	if err != nil {
-		logs.Warn("%v: Failed when call NewTSocket()! err=%v\n", util.Caller(0), err.Error())
+		logs.Warn("%v: Failed when call NewTSocket()! err=%v\n", run.Caller(0), err.Error())
 		return false
 	}
 
 	transport := g_transportFactory.GetTransport(socket)
 	if err = transport.Open(); err != nil {
 		transport.Close()
-		logs.Warn("%v: Failed when call GetTransport()! err=%v\n", util.Caller(0), err.Error())
+		logs.Warn("%v: Failed when call GetTransport()! err=%v\n", run.Caller(0), err.Error())
 		return false
 	}
 
@@ -154,14 +154,14 @@ func Init(logMsg string, confd config.Configer) {
 	logs.Info("scribe<%v> init start!", logMsg)
 	defer logs.Info("scribe<%v> init end!", logMsg)
 
-	open := confd.DefaultBool("scribe_open", false)
+	open := confd.DefaultBool("scribe::open", false)
 	logs.Info("scribe<%v> open: %v", logMsg, open)
 	if !open {
 		return
 	}
-	addr := confd.DefaultString("scribe_addr", "localhost:7915")
-	goNum := confd.DefaultInt("scribe_gonum", -1)
-	bufNum := confd.DefaultInt("scribe_bufnum", -1)
+	addr := confd.DefaultString("scribe::addr", "localhost:7915")
+	goNum := confd.DefaultInt("scribe::gonum", -1)
+	bufNum := confd.DefaultInt("scribe::bufnum", -1)
 
 	InitScribe(addr, goNum, bufNum)
 }

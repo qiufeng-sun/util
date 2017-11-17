@@ -7,9 +7,9 @@ import (
 )
 
 //
-func TestPrintPanic(t *testing.T) {
+func TestRecover(t *testing.T) {
 	go func() {
-		defer PrintPanic(false)
+		defer Recover(false)
 
 		panic("hehe!")
 	}()
@@ -40,7 +40,7 @@ func TestGoExec(t *testing.T) {
 	go Exec(false, print2, "f2", "f22")
 
 	go func() {
-		defer PrintPanic(false)
+		defer Recover(false)
 		print0()
 	}()
 
