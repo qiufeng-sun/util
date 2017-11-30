@@ -97,3 +97,29 @@ func ToValues(vs ...interface{}) []reflect.Value {
 
 	return r
 }
+
+// DrainChannel waits for the channel to finish
+// emptying (draining) for up to the expiration.  It returns
+// true if the drain completed (the channel is empty), false otherwise.
+func DrainChannel(ch reflect.Value, expire time.Time) bool {
+	var dur = time.Millisecond * 10
+
+	for {
+		if ch.Len() == 0 {
+			return true
+		}
+		now := time.Now()
+		if now.After(expire) {
+			return false
+		}
+		// We sleep the lesser of the remaining time, or
+		// 10 milliseconds.  This polling is kind of suboptimal for
+		// draining, but its far far less complicated than trying to
+		// arrange special messages to force notification, etc.
+		//dur = expire.Sub(now)
+		//if dur > time.Millisecond*10 {
+		//	dur = time.Millisecond * 10
+		//}
+		time.Sleep(dur)
+	}
+}
