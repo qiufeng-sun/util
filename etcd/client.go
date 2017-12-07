@@ -172,22 +172,3 @@ func (this *EtcdClient) watch() {
 		}
 	}
 }
-
-//
-func AddWatchs(etcdAddrs, services []string, fUpdate func(svc string, svcAddrs []string)) {
-	logs.Info("etcd add watchs: etcdAdrs=%v, services=%v", etcdAddrs, services)
-
-	for _, v := range services {
-		go func(svc string) {
-			c := NewEtcdClient(etcdAddrs, svc)
-			for range c.Watch {
-				infos := c.GetServerInfos()
-				addrs := make([]string, len(infos))
-				for i, info := range infos {
-					addrs[i] = info.Addr
-				}
-				fUpdate(svc, addrs)
-			}
-		}(v)
-	}
-}
