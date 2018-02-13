@@ -1,29 +1,35 @@
-#beego - v1.7.0
-git@git.n.xiaomi.com:third_party/beego.git	github.com/astaxie/beego		v1.7.0
+#beego
+#https://github.com/astaxie/beego.git      github.com/astaxie/beego		v1.9.0
 
 #redigo
-git@git.n.xiaomi.com:third_party/redigo.git    github.com/garyburd/redigo		v1.0.0
+#https://github.com/garyburd/redigo.git     github.com/garyburd/redigo		v1.0.0
 
-#mangos
-git@git.n.xiaomi.com:third_party/mangos.git		github.com/go-mangos/mangos		v1.2.0
+#radix
+#https://github.com/mediocregopher/radix.v2.git github.com/mediocregopher/radix.v2 264c698
 
 #protobuf
-git@git.n.xiaomi.com:third_party/protobuf.git	github.com/golang/protobuf		1f49d83
+#https://github.com/golang/protobuf.git   github.com/golang/protobuf		1f49d83
 
-#thrift - v0.9.1
-git@git.n.xiaomi.com:third_party/thrift.git   git.apache.org/thrift.git    0.9.1
+#core to do use reversion
+#https://github.com/qiufeng-sun/core.git        core master
 
-#util to do use reversion
-git@git.n.xiaomi.com:sunxiguang/util.git util master
+#mangos
+#git@git.n.xiaomi.com:third_party/mangos.git		github.com/go-mangos/mangos		v1.2.0
 
 #etcd
-git@git.n.xiaomi.com:third_party/etcd.git github.com/coreos/etcd v3.0.4
+#git@git.n.xiaomi.com:third_party/etcd.git github.com/coreos/etcd v3.0.4
 
 #context for etcd
-git@git.n.xiaomi.com:third_party/net.git golang.org/x/net release-branch.go1.7
+#git@git.n.xiaomi.com:third_party/net.git golang.org/x/net release-branch.go1.7
 
 #go-codec library for etcd
-git@git.n.xiaomi.com:third_party/codec.git github.com/ugorji/go 5cd0f2b
+#git@git.n.xiaomi.com:third_party/codec.git github.com/ugorji/go 5cd0f2b
+
+#thrift - v0.9.1
+#git@git.n.xiaomi.com:third_party/thrift.git   git.apache.org/thrift.git    0.9.1
 
 #mysql
-git@git.n.xiaomi.com:third_party/go-sql-driver-mysql.git github.com/go-sql-driver/mysql v1.2
+#git@git.n.xiaomi.com:third_party/go-sql-driver-mysql.git github.com/go-sql-driver/mysql v1.2
+
+#ut tools
+https://github.com/smartystreets/goconvey.git github.com/smartystreets/goconvey e5b2b7c91
