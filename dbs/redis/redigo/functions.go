@@ -1,4 +1,4 @@
-package redis
+package redigo
 
 import (
 	"util/logs"
@@ -21,4 +21,8 @@ func Lock(key string, lockSec int, conn *RedisConn) bool {
 
 func Unlock(key string, conn *RedisConn) {
 	conn.Do("DEL", key)
+}
+
+func GenLockKey(key string) string {
+	return "lock:" + key
 }

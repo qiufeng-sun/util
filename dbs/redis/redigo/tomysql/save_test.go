@@ -6,22 +6,22 @@ import (
 	"testing"
 	"time"
 
-	"util/dbs/redis"
+	"util/dbs/redis/redigo"
 )
 
 //
-var g_samplePools *redis.RedisPools
+var g_samplePools *redigo.RedisPools
 
 //
 func init() {
 	Init("test.conf")
-	redis.InitByFile("../redis.conf")
+	redigo.InitByFile("../redis.conf")
 
-	g_samplePools = redis.GetRedisPools("sample")
+	g_samplePools = redigo.GetRedisPools("sample")
 }
 
 //
-func getSampleConn() *redis.RedisConn {
+func getSampleConn() *redigo.RedisConn {
 	return g_samplePools.GetConn()
 }
 

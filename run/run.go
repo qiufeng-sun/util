@@ -53,7 +53,7 @@ func Recover(exit bool) {
 
 		if exit {
 			logs.Critical("exit now!")
-			logs.GetLogger().Flush()
+			logs.GetLogger().Close()
 			os.Exit(1)
 		}
 	}

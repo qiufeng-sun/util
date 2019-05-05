@@ -3,8 +3,8 @@ package errs
 import (
 	"fmt"
 
-	"util"
 	"util/logs"
+	"util/run"
 )
 
 type Error struct {
@@ -17,7 +17,7 @@ func (e Error) Error() string {
 }
 
 func New(code int, format string, v ...interface{}) *Error {
-	caller := util.Caller(1)
+	caller := run.Caller(1)
 	msg := fmt.Sprintf(format, v...)
 	e := &Error{Code: code, Msg: caller + msg}
 

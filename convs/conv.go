@@ -1,6 +1,9 @@
-package typeconv
+package convs
 
-import "strconv"
+import (
+	"reflect"
+	"strconv"
+)
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -35,4 +38,16 @@ func ToFloat64(v interface{}) float64 {
 	}
 
 	return 0.0
+}
+
+//
+func ToInterfaceSlice(val interface{}) []interface{} {
+	rv := reflect.ValueOf(val)
+	num := rv.Len()
+	ret := make([]interface{}, num)
+	for i := 0; i < num; i++ {
+		ret[i] = rv.Index(i).Interface()
+	}
+
+	return ret
 }

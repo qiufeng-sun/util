@@ -5,6 +5,7 @@ import (
 
 	"github.com/astaxie/beego/orm"
 
+	"core/time"
 	"util/loader"
 	"util/logs"
 )
@@ -16,15 +17,17 @@ var (
 
 //
 type DatabaseConfig struct {
-	Driver   string `json:"dbdriver"`
-	Protocol string `json:"protocol"`
-	Address  string `json:"address"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Database string `json:"database"`
-	Charset  string `json:"charset"`
-	MaxIdle  int    `json:"maxIdle"`
-	MaxConn  int    `json:"maxConn"`
+	Driver       string `json:"dbdriver"`
+	Protocol     string `json:"protocol"`
+	Address      string `json:"address"`
+	Username     string `json:"username"`
+	Password     string `json:"password"`
+	Database     string `json:"database"`
+	Charset      string `json:"charset"`
+	MaxIdle      int    `json:"maxIdle"`
+	MaxConn      int    `json:"maxConn"`
+	CheckSec     int    `json:"checkSec"`
+	CurCheckTime int64
 }
 
 func (this DatabaseConfig) GenDsn() string {
@@ -63,6 +66,8 @@ func InitByCfgs(cfgs map[string]DatabaseConfig) {
 		if _, ok := g_dbCfgs[k]; ok {
 			panic(fmt.Sprintf("duplicate alias name! duplicate:%v\n", k))
 		}
+
+		cfg.CurCheckTime = time.Now().Unix()
 		g_dbCfgs[k] = cfg
 
 		dsn := cfg.GenDsn()
@@ -97,12 +102,23 @@ const sql_ping = "select 1"
 
 //
 func HealthCheck() error {
+
+	nowUnix := time.Now().Unix()
+
 	o := orm.NewOrm()
-	for k := range g_dbCfgs {
-		o.Using(k)
-		_, e := o.Raw(sql_ping).Exec()
-		if e != nil {
-			return fmt.Errorf("test mysql failed! name=%v, %v", k, e)
+	for k, dbCfg := range g_dbCfgs {
+		if nowUnix-dbCfg.CurCheckTime >= int64(dbCfg.CheckSec) {
+
+			logs.Debug("HealthCheck| Test Mysql name=%v", k)
+
+			o.Using(k)
+			_, e := o.Raw(sql_ping).Exec()
+			if e != nil {
+				logs.Error("HealthCheck|test mysql failed! name=%v, err=%v", k, e)
+			}
+
+			dbCfg.CurCheckTime = nowUnix
+			g_dbCfgs[k] = dbCfg
 		}
 	}
 

@@ -3,6 +3,7 @@ package util
 import (
 	"encoding/json"
 	"errors"
+	"math/rand"
 	"reflect"
 	"time"
 )
@@ -122,4 +123,36 @@ func DrainChannel(ch reflect.Value, expire time.Time) bool {
 		//}
 		time.Sleep(dur)
 	}
+}
+
+// 参考: rand.Perm
+func Perm(n int32) []int32 {
+	m := make([]int32, n)
+
+	for i := int32(0); i < n; i++ {
+		j := rand.Int31n(i + 1)
+		m[i] = m[j]
+		m[j] = i
+	}
+	return m
+}
+
+//把数组打乱顺序
+func PermArray(array []int32) []int32 {
+	for i := int32(0); i < int32(len(array)); i++ {
+		j := rand.Int31n(i + 1)
+		temp := array[i]
+		array[i] = array[j]
+		array[j] = temp
+	}
+	return array
+}
+
+func ProcTime(t string) (int64, bool) {
+	r, e := time.Parse("2006010215", t)
+	if e != nil {
+		return 0, false
+	}
+
+	return r.Unix(), true
 }

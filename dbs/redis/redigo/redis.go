@@ -1,4 +1,4 @@
-package redis
+package redigo
 
 import (
 	"encoding/json"

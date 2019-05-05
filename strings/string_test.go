@@ -33,3 +33,10 @@ func TestSplit(t *testing.T) {
 
 	t.Logf("string:%v, slice:%v, num:%v", s, ss, len(ss))
 }
+
+func TestToInt32Array(t *testing.T) {
+	str := "1,2,3,45"
+
+	ss, ok := ToInt32Array(str, ",", 4)
+	t.Log(ss, ok)
+}

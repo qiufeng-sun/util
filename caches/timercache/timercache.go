@@ -50,7 +50,7 @@ func (this *AtomicCache) loadAll() {
 		c := d.Cacher
 		dd, e := c.LoadData()
 		if e != nil {
-			panic(fmt.Sprintf("%v load failed!", c.LogName()))
+			panic(fmt.Sprintf("%v load failed! error:%v", c.LogName(), e))
 		}
 
 		this.Cache[k].Data = dd
@@ -87,7 +87,7 @@ func (this *AtomicCache) updateData(k string, d *CacheData) {
 		c := d.Cacher
 		dd, e := c.LoadData()
 		if e != nil {
-			logs.Warn("%v load failed", c.LogName())
+			logs.Warn("%v load failed! error:%v", c.LogName(), e)
 			continue
 		}
 

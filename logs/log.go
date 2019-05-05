@@ -48,6 +48,7 @@ import (
 
 	ghLogs "github.com/astaxie/beego/logs"
 
+	"runtime"
 	"util"
 )
 
@@ -86,6 +87,7 @@ func Init(cfgFile string) *ghLogs.BeeLogger {
 	}
 
 	for k, v := range m {
+		delLogger(k)
 		SetLogger(k, v)
 		if v.Level > g_logLv {
 			g_logLv = v.Level
@@ -112,6 +114,10 @@ func SetLogger(adapterName string, cfg *LogCfg) {
 	SetLoggerByJson(adapterName, jsonCfg)
 }
 
+func delLogger(adapterName string) {
+	g_log.DelLogger(adapterName)
+}
+
 func SetLoggerByJson(adapterName, jsonCfg string) {
 	e := g_log.SetLogger(adapterName, jsonCfg)
 	if e != nil {
@@ -127,7 +133,12 @@ func SetLogLv(lv int) {
 }
 
 func Debug(format string, v ...interface{}) {
-	g_log.Debug(format, v...)
+	if ghLogs.LevelDebug > g_logLv {
+		return
+	}
+
+	fixformat := buildCaller(format)
+	g_log.Debug(fixformat, v...)
 }
 
 func Debugln(v ...interface{}) {
@@ -135,7 +146,8 @@ func Debugln(v ...interface{}) {
 }
 
 func Error(format string, v ...interface{}) {
-	g_log.Error(format, v...)
+	fixformat := buildCaller(format)
+	g_log.Error(fixformat, v...)
 }
 
 func Errorln(v ...interface{}) {
@@ -151,7 +163,12 @@ func Infoln(v ...interface{}) {
 }
 
 func Warn(format string, v ...interface{}) {
-	g_log.Warning(format, v...)
+	if ghLogs.LevelWarning > g_logLv {
+		return
+	}
+
+	fixformat := buildCaller(format)
+	g_log.Warning(fixformat, v...)
 }
 
 func Warnln(v ...interface{}) {
@@ -165,4 +182,10 @@ func Critical(format string, v ...interface{}) {
 func Panicln(v ...interface{}) {
 	s := fmt.Sprintf(strings.Repeat("%v ", len(v)), v...)
 	panic(s)
+}
+
+func buildCaller(format string) string {
+	_, file, line, _ := runtime.Caller(2)
+	callerformat := fmt.Sprintf("[%v:%v] ", file, line) + format
+	return callerformat
 }

@@ -1,6 +1,7 @@
 package net
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 
@@ -11,7 +12,7 @@ import (
 //
 func HttpGet(url string) ([]byte, error) {
 	//
-	logs.Debug("url:%v\n", url)
+	//logs.Debug("url:%v\n", url)
 
 	//
 	resp, e := http.Get(url)
@@ -28,4 +29,19 @@ func HttpGet(url string) ([]byte, error) {
 	}
 
 	return data, nil
+}
+
+//
+func HttpGetJson(url string, out interface{}) error {
+	data, e := HttpGet(url)
+	if e != nil {
+		return e
+	}
+
+	if e := json.Unmarshal(data, out); e != nil {
+		logs.Error("HttpGetJson|url:%v, error:%v, data:%v", url, e, string(data))
+		return e
+	}
+
+	return nil
 }
